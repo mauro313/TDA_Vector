@@ -1,5 +1,6 @@
 #ifndef VECTOR_H_INCLUDED
 #define VECTOR_H_INCLUDED
+#include <stdbool.h>
 
 typedef struct{
  void** v;
@@ -7,7 +8,7 @@ typedef struct{
  int max_size;
 }vector_t;
 
-vector_t* vector_new(int init_size);
+vector_t* vector_new(int maxsize);
 
 void vector_free(vector_t** v);
 
@@ -15,9 +16,9 @@ int vector_size(vector_t* v);
 
 int vector_maxsize(vector_t* v);
 
-int vector_isfull(vector_t* v);
+bool vector_isfull(vector_t* v);
 
-int vector_isempty(vector_t* v);
+bool vector_isempty(vector_t* v);
 
 void* vector_get(vector_t* v,int index);
 
@@ -68,6 +69,10 @@ void vector_shell_sort(vector_t* v,int (*compare)(void*,void*));
 int vector_sequential_search(vector_t* v,void* value,int (*compare)(void*,void*));
 
 int vector_binary_search(vector_t* v,void* value,int (*compare)(void*,void*));
+
+/*************************RECORRIDO********************************************/
+
+void vector_traverse(vector_t* v,bool vector_do(void*,void*),void* context);
 
 #include "Vector.c"
 #endif //VECTOR_H_INCLUDED
