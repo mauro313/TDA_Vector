@@ -4,26 +4,35 @@
 #include <math.h>
 #include "Vector.h"
 
-// Crea el vector vacío a parir de la reserva en memoria. Tamaño = 0, Tamaño máximo = ini_size.
+/**
+ * @brief create a new vector with the select max size.
+ * 
+ * @param maxsize 
+ * @return vector_t* 
+ */
 vector_t* vector_new(int maxsize){
   vector_t* vector = (vector_t*) malloc(sizeof(vector_t));
   if(vector == NULL){
-    printf("memory cannot be reserved");
-    exit(-1);
+    printf("\nmemory cannot be reserved(1)\n");
+    exit(EXIT_FAILURE);
    }
   vector->v =(void**)malloc(maxsize*sizeof(void*));
   if(vector->v == NULL){
     free(vector);
     vector = NULL;
-    printf("memory cannot be reserved(1)");
-    exit(-2);
+    printf("\nmemory cannot be reserved(2)\n");
+    exit(EXIT_FAILURE);
   }
   vector->size = 0;
-  vector->max_size = maxsize;  
+  vector->max_size = maxsize;
   return vector;
 }
 
-// Libera la memoria del vector
+/**
+ * @brief free the memory of a vector.
+ * 
+ * @param v 
+ */
 void vector_free(vector_t** v){
   if(v != NULL && (*v) != NULL){
     free((*v)->v);
@@ -33,170 +42,232 @@ void vector_free(vector_t** v){
   }
 }
 
-//Retorna el tamaño actual del vector
+/**
+ * @brief return the current size of a vector.
+ * 
+ * @param v 
+ * @return int 
+ */
 int vector_size(vector_t* v){
   if(v == NULL){
-    printf("vector pointer is NULL");
-    exit(-3);  
+    printf("\nvector pointer is NULL(1)\n");
+    exit(EXIT_FAILURE);
   }
   return v->size;
 }
 
-//Retorna el tamaño máximo que puede tener el vector
+/**
+ * @brief return the max size of a vector.
+ * 
+ * @param v 
+ * @return int 
+ */
 int vector_maxsize(vector_t* v){
   if(v == NULL){
-    printf("vector pointer is NULL");
-    exit(-4);  
+    printf("\nvector pointer is NULL(2)\n");
+    exit(EXIT_FAILURE);
   }
-  return v->max_size;  
+  return v->max_size;
 }
 
-// Devuelve false si no está lleno y true si está lleno.
+/**
+ * @brief return true if the vector is full and false if is not.
+ * 
+ * @param v 
+ * @return true 
+ * @return false 
+ */
 bool vector_isfull(vector_t* v){
   if(v == NULL){
-    printf("vector pointer is NULL");
-    exit(-5);  
+    printf("\nvector pointer is NULL(3)\n");
+    exit(EXIT_FAILURE);
   }
-  bool returned = false;
-  if(v->size == v->max_size){
-    returned = true;
-  }
-  return returned;
+  return (v->size == v->max_size);
 }
 
-// Devuelve false si no está vacío y true si está vacío.
+/**
+ * @brief return true if the vector is empty and false if is not.
+ * 
+ * @param v 
+ * @return true 
+ * @return false 
+ */
 bool vector_isempty(vector_t* v){
   if(v == NULL){
-    printf("vector pointer is NULL");
-    exit(-6);  
+    printf("\nvector pointer is NULL(4)\n");
+    exit(EXIT_FAILURE);
   }
-  bool returned = false;
-  if(v->size == 0){
-    returned = true;
-  }
-  return returned;
+  return (v->size == 0);
 }
 
-// Retorna el valor de una posición del vector.
+/**
+ * @brief return the element in the selected position.
+ * 
+ * @param v 
+ * @param index 
+ * @return void* 
+ */
 void* vector_get(vector_t* v,int index){
   if(v == NULL){
-    printf("vector pointer is NULL");
-    exit(-7);
+    printf("\nvector pointer is NULL(5)\n");
+    exit(EXIT_FAILURE);
   }
   if(index<0 || index>=v->size){
-    printf("invalid index");
-    exit(-8);  
+    printf("\ninvalid index(1)\n");
+    exit(EXIT_FAILURE);
   }
   return v->v[index];
 }
 
-// Permite reemplazar el valor de una posición del vector(devuelve el valor reemplazado).
-//En caso contrario retorna NULL
+/**
+ * @brief exchange the element in the select position.Return the exchanged element.
+ * 
+ * @param v 
+ * @param index 
+ * @param value 
+ * @return void* 
+ */
 void* vector_set(vector_t* v,int index,void* value){
   if(v == NULL){
-    printf("vector pointer is NULL");
-    exit(-9);  
+    printf("\nvector pointer is NULL(6)\n");
+    exit(EXIT_FAILURE);
   }
   if(index<0 || index>=v->size){
-    printf("invalid index");
-    exit(-10);  
+    printf("\ninvalid index(2)\n");
+    exit(EXIT_FAILURE);
   }
   void* returned = v->v[index];
   v->v[index] = value;
   return returned;
 }
 
-// Permite agregar un elemento al final.Retorna 1 si el valor se insertó y 0 en caso contrario
-int vector_add(vector_t* v,void* value){
+/**
+ * @brief add a element at the end of a vector. Return true if the element was added and false
+ * otherwise (the vector is full).
+ * 
+ * @param v 
+ * @param value 
+ * @return bool 
+ */
+bool vector_add(vector_t* v,void* value){
   if(v == NULL){
-    printf("vector pointer is NULL");
-    exit(-11);  
+    printf("\nvector pointer is NULL(7)\n");
+    exit(EXIT_FAILURE);
   }
-  int returned = 0; 
+  bool returned = false;
   if(!vector_isfull(v)){
     v->v[v->size] = value;
     v->size++;
-    returned = 1;
+    returned = true;
   }
   return returned;
 }
 
-//Permite agregar un elemento al inicio.Retorna 1 si el valor se insertó y 0 en caso contrario
-int vector_add_first(vector_t* v, void* value){
+/**
+ * @brief add a element at the begin of a vector.Return true if the element was added and 
+ * false otherwise.
+ * 
+ * @param v 
+ * @param value 
+ * @return bool 
+ */
+bool vector_add_first(vector_t* v, void* value){
   if(v == NULL){
-    printf("vector pointer is NULL");
-    exit(-12);  
+    printf("\nvector pointer is NULL(8)\n");
+    exit(EXIT_FAILURE);
   }
-  int returned = 0;
+  bool returned = false;
   if(!vector_isfull(v)){
     v->size++;
     for(int i=v->size-1;i=1;i--){
-      v->v[i] = v->v[i-1];    
+      v->v[i] = v->v[i-1];
     }
     v->v[0] = value;
-    returned = 1;      
+    returned = true;
   }
   return returned;
 }
 
-// Permite agregar un elemento en una posición determinada.Retorna 1 si lo agrego y 0 en caso contrario(vector lleno).
-int vector_insert(vector_t* v,int index,void* value){
+/**
+ * @brief insert a element at the selected position. Return true if the element was added and false
+ * otherwise.
+ * 
+ * @param v 
+ * @param index 
+ * @param value 
+ * @return bool 
+ */
+bool vector_insert(vector_t* v,int index,void* value){
   if(v == NULL){
-    printf("vector pointer is NULL");
-    exit(-13);  
+    printf("\nvector pointer is NULL(9)\n");
+    exit(EXIT_FAILURE);
   }
-  if(index<0 || index>v->size){
-    printf("invalid index");
-    exit(-14);  
+  if(index<0 || index>v->size || index == v->max_size){
+    printf("\ninvalid index(3)\n");
+    exit(EXIT_FAILURE);
   }
   int returned = 0;
   if(!vector_isfull(v)){
     v->size++;
     for(int i=v->size-1;i>index;i--){
-      v->v[i] = v->v[i-1];    
+      v->v[i] = v->v[i-1];
     }
     v->v[index] = value;
-    returned = 1;
+    returned = true;
   }
   return returned;
 }
 
-//Permite insertar elementos de manera ordenada. Retorna 1 si se agrego el valor y 0 en caso contrario(vector lleno).
-int vector_insert_sorted(vector_t* v,void* value,int(*compare)(void*,void*)){
+/**
+ * @brief add a element in sorted form. Return true if the element was added and false otherwise
+ * (vector full).
+ * 
+ * @param v 
+ * @param value 
+ * @param compare 
+ * @return bool 
+ */
+bool vector_insert_sorted(vector_t* v,void* value,int(*compare)(void*,void*)){
   if(v == NULL){
-    printf("vector pointer is NULL");
-    exit(-15);  
+    printf("vector pointer is NULL(10)");
+    exit(EXIT_FAILURE);
   }
-  int returned = 0;
+  bool returned = false;
   if(!vector_isfull(v)){
     int index = 0;
     while(index<v->size && compare(value,v->v[index])>=0){
       index++;
     }
     if(index == 0 && vector_isempty(v)){
-      v->v[index] = value;  
+      v->v[index] = value;
     }
     else{
       v->size++;
       for(int i=v->size-1;i>index;i--){
-        v->v[i]=v->v[i-1];   
+        v->v[i]=v->v[i-1];
       }
       v->v[index]=value;
     }
-    returned = 1;
+    returned = true;
   }
-  return returned;  
+  return returned;
 }
 
-// Permite eliminar un elemento del vector. Retorna dicho elemento. 
+/**
+ * @brief remove the element in the selected position.
+ * 
+ * @param v 
+ * @param index 
+ * @return void* 
+ */
 void* vector_remove(vector_t* v,int index){
   if(v == NULL){
-    printf("vector pointer is NULL");
-    exit(-16);  
+    printf("\nvector pointer is NULL(11)\n");
+    exit(EXIT_FAILURE);
   }
   if(index<0 || index>=v->size){
-    printf("invalid index");
-    exit(-17);  
+    printf("\ninvalid index(4)\n");
+    exit(EXIT_FAILURE);
   }
   void* returned = v->v[index];
   v->size--;
@@ -206,23 +277,31 @@ void* vector_remove(vector_t* v,int index){
   return returned;
 }
 
-
-//Imprime el contenido de un vector
+/**
+ * @brief print the vector.
+ * 
+ * @param v 
+ * @param printf_ 
+ */
 void vector_printf(vector_t* v,void (*printf_)(void*)){
   if(v == NULL){
-    printf("vector pointer is NULL");
-    exit(-18);  
+    printf("\nvector pointer is NULL(12)\n");
+    return;
   }
   for(int i=0;i<v->size;i++){
     printf_(v->v[i]);
   }
 }
 
-//Desordena los elementos de un vector
+/**
+ * @brief shuffle the elements in a vector.
+ * 
+ * @param v 
+ */
 void vector_shuffle(vector_t* v){
   if(v == NULL){
-    printf("vector pointer is NULL");
-    exit(-19);  
+    printf("\nvector pointer is NULL(13)\n");
+    return;
   }
   if(!vector_isempty(v)){
     srand(time(NULL));
@@ -231,19 +310,22 @@ void vector_shuffle(vector_t* v){
       void* auxiliar = v->v[index];
       v->v[index] = v->v[i];
       v->v[i]= auxiliar;
-    }       
+    }
   }
 }
 
-/********************ALGORITMOS DE ORDENAMIENTO***************************************/
+/********************SORT ALGORITHMS***************************************/
 
-//Ordenamiento por seleccion
-//La base del algoritomo radica en elegir el elemento más pequeño del arreglo e
-// intercambiarlo por el primero, luego se repite el proceso desde el seguno elemento
+/**
+ * @brief version of the select sort.
+ * 
+ * @param v 
+ * @param compare 
+ */
 void vector_select_sort(vector_t* v,int (*compare)(void*,void*)){
   if(v == NULL){
-    printf("vector pointer is NULL");
-    exit(-20);  
+    printf("\nvector pointer is NULL(14)\n");
+    return;
   }
   int size = v->size;
   for(;size>0;size--){
@@ -251,19 +333,22 @@ void vector_select_sort(vector_t* v,int (*compare)(void*,void*)){
       if(compare(v->v[size-1],v->v[i])<0){
         void* auxiliar = v->v[size-1];
         v->v[size-1] = v->v[i];
-        v->v[i] = auxiliar;    
-      }  
-    }  
-  }  
+        v->v[i] = auxiliar;
+      }
+    }
+  }
 }
 
-//Ordenamiento por insercion
-//Se recorre el arreglo desde el comienzo y cuando se encuentra un elemento menor que el actual
-// se lo quita del arreglo y se retrocede hasta insertarlo en el lugar correcto.
+/**
+ * @brief version of the insert sort
+ * 
+ * @param v 
+ * @param compare 
+ */
 void vector_insert_sort(vector_t* v,int (*compare)(void*,void*)){
   if(v == NULL){
-    printf("vector pointer is NULL");
-    exit(-21);  
+    printf("\nvector pointer is NULL(15)\n");
+    return;
   }
   for(int i=1;i<v->size;i++){
     if(compare(v->v[i],v->v[i-1])<0){
@@ -271,21 +356,23 @@ void vector_insert_sort(vector_t* v,int (*compare)(void*,void*)){
       void* auxiliar = v->v[j+1];
       while(j>=0 && compare(auxiliar,v->v[j])<0){
         v->v[j]=v->v[j+1];
-        j--;    
+        j--;
       }
-      v->v[j+1]=auxiliar;   
-    }  
-  }  
+      v->v[j+1]=auxiliar;
+    }
+  }
 }
 
-//Ordenamiento por burbujeo
-//Se recorre el arreglo desde el comienzo, se comparan dos celdas contiguas, si no estan
-//ordenadas en forma continua, las intercambia.
-//Se repite el proceso n-1 veces, hasta que n = 1. 
+/**
+ * @brief version of the bubble sort.
+ * 
+ * @param v 
+ * @param compare 
+ */
 void vector_bubble_sort(vector_t* v,int (*compare)(void*,void*)){
   if(v == NULL){
-    printf("vector pointer is NULL");
-    exit(-22);  
+    printf("\nvector pointer is NULL(16)\n");
+    return;
   }
   int size = v->size;
   for(;size>0;size--){
@@ -294,16 +381,21 @@ void vector_bubble_sort(vector_t* v,int (*compare)(void*,void*)){
         void* auxiliar  = v->v[i];
         v->v[i]=v->v[i-1];
         v->v[i-1]=auxiliar;
-      }  
-    }    
-  }    
+      }
+    }
+  }
 }
 
-//Ordenamiento por burbujeo mejorado(Se evitan recorridos innecesarios.Se reduce complejidad)
+/**
+ * @brief improved version of the select sort.
+ * 
+ * @param v 
+ * @param compare 
+ */
 void vector_bubble_sort_improved(vector_t* v,int (*compare)(void*,void*)){
   if(v == NULL){
-    printf("vector pointer is NULL");
-    exit(-23);  
+    printf("\nvector pointer is NULL(17)\n");
+    return;
   }
   int size = v->size;
   int check = 1;
@@ -314,18 +406,23 @@ void vector_bubble_sort_improved(vector_t* v,int (*compare)(void*,void*)){
         void* auxiliar  = v->v[i];
         v->v[i]=v->v[i-1];
         v->v[i-1]=auxiliar;
-        check = 1;  
-      }  
+        check = 1;
+      }
     }
-    size--;    
-  }    
+    size--;
+  }
 }
 
-// Algoritmo de ordenamiento quick sort (inestable).Emplea la recursividad. Tiene el enfoque de dividir y conquistar.
+/**
+ * @brief version of the quick sort.
+ * 
+ * @param v 
+ * @param compare 
+ */
 void vector_quick_sort(vector_t* v,int(*compare)(void*,void*)){
   if(v == NULL){
-    printf("vector pointer is NULL");
-    exit(-24);  
+    printf("\nvector pointer is NULL(18)\n");
+    return;
   }
   _quick_sort(&v->v[0],&v->v[v->size-1],compare);
 }
@@ -357,13 +454,18 @@ void _quick_sort(void** start,void** end,int(*compare)(void*,void*)){
   }
 }
 
-//algoritmo de ordenamiento merge sort (estable).Emplea la recursividad. Tiene el enfoque de dividir y conquistar
+/**
+ * @brief version of the merge sort.
+ * 
+ * @param v 
+ * @param compare 
+ */
 void vector_merge_sort(vector_t* v,int (*compare)(void*,void*)){
   if(v == NULL){
-    printf("vector pointer is NULL");
-    exit(-25);  
+    printf("\nvector pointer is NULL(19)\n");
+    return;
   }
-  merge_sort(v,0,v->size-1,compare);  
+  merge_sort(v,0,v->size-1,compare);
 }
 
 void merge_sort(vector_t* v,int bottom,int top,int(*compare)(void*,void*)){
@@ -398,7 +500,7 @@ void _merge(vector_t* v,int bottom,int middle,int top,int(*compare)(void*,void*)
       v->v[k]=array_right[j];
       j++;
     }
-    k++;  
+    k++;
   }
   while (i < size_1) {
     v->v[k]=array_left[i];
@@ -412,11 +514,16 @@ void _merge(vector_t* v,int bottom,int middle,int top,int(*compare)(void*,void*)
   }
 }
 
-//Algoritmo de ordenamiento shell sort (forma mejorada del algoritmo insertion sort)
+/**
+ * @brief version of the shell sort.
+ * 
+ * @param v 
+ * @param compare 
+ */
 void vector_shell_sort(vector_t* v,int (*compare)(void*,void*)){
   if(v == NULL){
-    printf("vector pointer is NULL");
-    exit(-26);  
+    printf("\nvector pointer is NULL(20)\n");
+    return;
   }
   for(int interval = v->size/2;interval > 0;interval /= 2){
     for (int i = interval; i < v->size; i += 1) {
@@ -427,53 +534,77 @@ void vector_shell_sort(vector_t* v,int (*compare)(void*,void*)){
       }
       v->v[j]=auxiliar;
     }
-  }  
+  }
 }
 
-/*******************ALGORITMOS DE BUSQUEDA********************************************/
+/*******************SEARCH ALGORITHMS********************************************/
 
+/**
+ * @brief version of the sequential search.Return the position of the element if it exist and 
+ * the max size otherwise.
+ * 
+ * @param v 
+ * @param value 
+ * @param compare 
+ * @return int 
+ */
 int vector_sequential_search(vector_t* v,void* value,int (*compare)(void*,void*)){
   if(v == NULL){
-    printf("vector pointer is NULL");
-    exit(-27);  
-  }  
+    printf("\nvector pointer is NULL(21)\n");
+    exit(EXIT_FAILURE);
+  }
   int returned = 0;
   while(returned<v->size && compare(v->v[returned],value)){
-    returned++;  
+    returned++;
   }
   return returned;
 }
 
-// el vector debe encontrarse ordenado para emplear este algoritmo
+/**
+ * @brief version of the binary search. The vector must be sorted.
+ * Return the position of the element if it exist and 
+ * the max size otherwise.
+ * 
+ * @param v 
+ * @param value 
+ * @param compare 
+ * @return int 
+ */
 int vector_binary_search(vector_t* v,void* value,int (*compare)(void*,void*)){
   if(v == NULL){
-    printf("vector pointer is NULL");
-    exit(-28);  
-  }    
+    printf("\nvector pointer is NULL(22)\n");
+    exit(EXIT_FAILURE);
+  }
   int lower = 0;
   int higher = v->size-1;
   int returned = (lower+higher)/2;
   while(lower < higher && compare(v->v[returned],value)){
     if(compare(v->v[returned],value)<0){
-      lower = returned + 1;    
+      lower = returned + 1;
     }
     else{
       higher = returned - 1;
     }
-    returned = (lower+higher)/2;  
+    returned = (lower+higher)/2;
   }
   return (!compare(v->v[returned],value))? returned:v->size;
 }
 
 
-// Procedimiento para recorrer un vector y realiar un procedimiento al mismo tiempo empleando una variable de contexto.
+/**
+ * @brief traverse the vector using a context variable.
+ * 
+ * @param v 
+ * @param vector_do 
+ * @param context 
+ */
 void vector_traverse(vector_t* v,bool vector_do(void* element,void* context),void* context){
   if(v == NULL){
-    printf("vector is NUll");
-    exit(-29);  
+    printf("\nvector pointer is NULL(23)\n");
+    return;
   }
   int counter = 0;
   while(counter < v->size  && vector_do(v->v[counter],context)){
-    counter++;  
+    counter++;
   }
 }

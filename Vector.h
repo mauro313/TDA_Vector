@@ -24,13 +24,13 @@ void* vector_get(vector_t* v,int index);
 
 void* vector_set(vector_t* v,int index,void* value);
 
-int vector_add(vector_t* v,void* value);
+bool vector_add(vector_t* v,void* value);
 
-int vector_add_first(vector_t* v, void* value);
+bool vector_add_first(vector_t* v, void* value);
 
-int vector_insert(vector_t* v,int index,void* value);
+bool vector_insert(vector_t* v,int index,void* value);
 
-int vector_insert_sorted(vector_t* v,void* value,int(*compare)(void*,void*));
+bool vector_insert_sorted(vector_t* v,void* value,int(*compare)(void*,void*));
 
 void* vector_remove(vector_t* v,int index);
 

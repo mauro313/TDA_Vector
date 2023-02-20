@@ -14,37 +14,43 @@ bool vector_amountOfEven(void* element,void* context);
 
 int main(void){
   srand(time(NULL));
-  //creo un vector de enteros
+  
+  // creation of an int vector.
   vector_t* new = vector_int(15);
  
-  //imprimo el vector
+  //print the vector
   vector_printf(new,print_int);
   
-  //ordeno los elementos
+  //sort the vector.
   vector_merge_sort(new,compare_int);
   
-  //vuelvo a imprimirlos
+  //print again the vector.
   printf("\n\n");
   vector_printf(new,print_int);
    
-  //elimino los elementos repetidos y vualvo a imprimirlo 
+  //delete the repeated elements and print again.
   vector_delete_all_repeated_elements(new,compare_int,delete_int_pointer);
   printf("\n\n");
   vector_printf(new,print_int);
    
-  //empleo de vector traverse
+  // using vector_traverse.
   int amountOfEven = 0;
   vector_traverse(new,vector_amountOfEven,&amountOfEven);
   printf("The amount of even numbers is %d ",amountOfEven);
 
-  //elimino el vector con sus elementos
+  //delete the vector and free memory.
   vector_int_delete(&new,delete_int_pointer);
   return 0;      
 }
 
-/***************Ejemplos de uso del tipo abstracto de dato*********************************/
+/***************EXAMPLE OF USE OF THE TDA*********************************/
 
-//funcion para crear un vector de punteros a enteros
+/**
+ * @brief create a int vector.
+ * 
+ * @param value 
+ * @return vector_t* 
+ */
 vector_t* vector_int(int value){
   vector_t* vector = vector_new(value);
   int* auxiliar = NULL;
@@ -56,7 +62,12 @@ vector_t* vector_int(int value){
   return vector;      
 }
 
-//procedimiento para borrar un vector y sus elementos (forma genérica)
+/**
+ * @brief erase all the elements in a vector and the vector.
+ * 
+ * @param vector 
+ * @param delete 
+ */
 void vector_int_delete(vector_t** vector,void (*delete)(void**)){
   if(*vector != NULL){
     void* auxiliar = NULL;
@@ -68,7 +79,11 @@ void vector_int_delete(vector_t** vector,void (*delete)(void**)){
   } 
 }
 
-// procedimientos auxiliares
+/**
+ * @brief auxiliar procedure to free memeory of a int pointer.
+ * 
+ * @param pointer 
+ */
 void delete_int_pointer(void** pointer){
   if(pointer != NULL){
     free(*pointer);
@@ -76,20 +91,35 @@ void delete_int_pointer(void** pointer){
   }
 }
 
+/**
+ * @brief auxiliar procedure to print a int pointer.
+ * 
+ * @param value 
+ */
 void print_int(void* value){
   printf(" %i ",*(int*)value);        
 }
 
+/**
+ * @brief auxiliar compare procedure.
+ * 
+ * @param value_1 
+ * @param value_2 
+ * @return int 
+ */
 int compare_int(void* value_1,void* value_2){
   int* v1 = value_1;
   int* v2 = value_2;
   return (*v1)-(*v2);  
 }
-///////////////////////////////////////////
 
-
-
-// eliminar elementos repetidos de un vector
+/**
+ * @brief delete al repeated elements in a vector.
+ * 
+ * @param vector 
+ * @param compare 
+ * @param free_element 
+ */
 void vector_delete_all_repeated_elements(vector_t* vector,int(*compare)(void*,void*),void(*free_element)(void**)){
   if(vector == NULL){
     printf("vector is NULL");
@@ -106,10 +136,15 @@ void vector_delete_all_repeated_elements(vector_t* vector,int(*compare)(void*,vo
   }     
 }
 
-//Escribir una función que permita mezclar dos vectores ordenados sin incluir elementos repetidos.
-//Tener en cuenta que la función debe servir sin importar qué datos guarden los vectores, pero
-//ambos vectores deben contener los mismos tipos de datos.
 
+/**
+ * @brief fusion two sort vectors in a new one without repeated elements.
+ * 
+ * @param vector1 
+ * @param vector2 
+ * @param compare 
+ * @return vector_t* 
+ */
 vector_t* merge_of_sort_vectors(vector_t* vector1,vector_t* vector2,int (*compare)(void*,void*)){
   vector_t* new_vector = vector_new(vector_size(vector1)+vector_size(vector2));
   int counter1 = 0;
@@ -150,7 +185,14 @@ vector_t* merge_of_sort_vectors(vector_t* vector1,vector_t* vector2,int (*compar
 }
 
 
-//funcion de ejemplo para uso de vector traverse
+/**
+ * @brief function used in vector_traverse.Return true if the element is even and false otherwise.
+ * 
+ * @param element 
+ * @param context 
+ * @return true 
+ * @return false 
+ */
 bool vector_amountOfEven(void* element,void* context){
   bool returned = false;
   if(element != NULL){
