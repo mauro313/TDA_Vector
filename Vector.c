@@ -142,7 +142,7 @@ void* vector_set(vector_t* v,int index,void* value){
 }
 
 /**
- * @brief add a element at the end of a vector. Return true if the element was added and false
+ * @brief add an element at the end of a vector. Return true if the element was added and false
  * otherwise (the vector is full).
  * 
  * @param v 
@@ -164,7 +164,7 @@ bool vector_add(vector_t* v,void* value){
 }
 
 /**
- * @brief add a element at the begin of a vector.Return true if the element was added and 
+ * @brief add an element at the begin of a vector.Return true if the element was added and 
  * false otherwise.
  * 
  * @param v 
@@ -189,7 +189,7 @@ bool vector_add_first(vector_t* v, void* value){
 }
 
 /**
- * @brief insert a element at the selected position. Return true if the element was added and false
+ * @brief insert an element at the selected position. Return true if the element was added and false
  * otherwise.
  * 
  * @param v 
@@ -219,7 +219,7 @@ bool vector_insert(vector_t* v,int index,void* value){
 }
 
 /**
- * @brief add a element in sorted form. Return true if the element was added and false otherwise
+ * @brief add an element in sorted form. Return true if the element was added and false otherwise
  * (vector full).
  * 
  * @param v 
@@ -294,7 +294,7 @@ void vector_printf(vector_t* v,void (*printf_)(void*)){
 }
 
 /**
- * @brief shuffle the elements in a vector.
+ * @brief shuffle the elements of a vector.
  * 
  * @param v 
  */
